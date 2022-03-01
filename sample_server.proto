@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option go_package = "./";
+package message_stream;
+
+message StreamingData {
+    string curr_data = 1;
+}
+
+service Streaming {
+    rpc SendData(StreamingData) returns (StreamingData) {}        
+}
