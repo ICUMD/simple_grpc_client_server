@@ -6,9 +6,10 @@ import (
 )
 
 type Server struct {
+	UnimplementedStreamServer
 }
 
 func (s *Server) SendData(ctx context.Context, msg *StreamingData) (*StreamingData, error) {
-	log.Printf("Message tp server: %s", msg.CurrData)
+	log.Printf("Message to server: %s", msg.CurrData)
 	return &StreamingData{CurrData: "Received"}, nil
 }

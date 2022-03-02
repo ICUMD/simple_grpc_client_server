@@ -7,6 +7,6 @@ message StreamingData {
     string curr_data = 1;
 }
 
-service Streaming {
+service Stream {
     rpc SendData(StreamingData) returns (StreamingData) {}        
 }
