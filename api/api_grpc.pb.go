@@ -18,86 +18,86 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// StreamClient is the client API for Stream service.
+// CommunicationClient is the client API for Communication service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type StreamClient interface {
-	SendData(ctx context.Context, in *StreamingData, opts ...grpc.CallOption) (*StreamingData, error)
+type CommunicationClient interface {
+	SendData(ctx context.Context, in *ExchangeData, opts ...grpc.CallOption) (*ExchangeData, error)
 }
 
-type streamClient struct {
+type communicationClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewStreamClient(cc grpc.ClientConnInterface) StreamClient {
-	return &streamClient{cc}
+func NewCommunicationClient(cc grpc.ClientConnInterface) CommunicationClient {
+	return &communicationClient{cc}
 }
 
-func (c *streamClient) SendData(ctx context.Context, in *StreamingData, opts ...grpc.CallOption) (*StreamingData, error) {
-	out := new(StreamingData)
-	err := c.cc.Invoke(ctx, "/message_stream.Stream/SendData", in, out, opts...)
+func (c *communicationClient) SendData(ctx context.Context, in *ExchangeData, opts ...grpc.CallOption) (*ExchangeData, error) {
+	out := new(ExchangeData)
+	err := c.cc.Invoke(ctx, "/message_stream.Communication/SendData", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// StreamServer is the server API for Stream service.
-// All implementations must embed UnimplementedStreamServer
+// CommunicationServer is the server API for Communication service.
+// All implementations must embed UnimplementedCommunicationServer
 // for forward compatibility
-type StreamServer interface {
-	SendData(context.Context, *StreamingData) (*StreamingData, error)
-	mustEmbedUnimplementedStreamServer()
+type CommunicationServer interface {
+	SendData(context.Context, *ExchangeData) (*ExchangeData, error)
+	mustEmbedUnimplementedCommunicationServer()
 }
 
-// UnimplementedStreamServer must be embedded to have forward compatible implementations.
-type UnimplementedStreamServer struct {
+// UnimplementedCommunicationServer must be embedded to have forward compatible implementations.
+type UnimplementedCommunicationServer struct {
 }
 
-func (UnimplementedStreamServer) SendData(context.Context, *StreamingData) (*StreamingData, error) {
+func (UnimplementedCommunicationServer) SendData(context.Context, *ExchangeData) (*ExchangeData, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendData not implemented")
 }
-func (UnimplementedStreamServer) mustEmbedUnimplementedStreamServer() {}
+func (UnimplementedCommunicationServer) mustEmbedUnimplementedCommunicationServer() {}
 
-// UnsafeStreamServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to StreamServer will
+// UnsafeCommunicationServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CommunicationServer will
 // result in compilation errors.
-type UnsafeStreamServer interface {
-	mustEmbedUnimplementedStreamServer()
+type UnsafeCommunicationServer interface {
+	mustEmbedUnimplementedCommunicationServer()
 }
 
-func RegisterStreamServer(s grpc.ServiceRegistrar, srv StreamServer) {
-	s.RegisterService(&Stream_ServiceDesc, srv)
+func RegisterCommunicationServer(s grpc.ServiceRegistrar, srv CommunicationServer) {
+	s.RegisterService(&Communication_ServiceDesc, srv)
 }
 
-func _Stream_SendData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StreamingData)
+func _Communication_SendData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExchangeData)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StreamServer).SendData(ctx, in)
+		return srv.(CommunicationServer).SendData(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/message_stream.Stream/SendData",
+		FullMethod: "/message_stream.Communication/SendData",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StreamServer).SendData(ctx, req.(*StreamingData))
+		return srv.(CommunicationServer).SendData(ctx, req.(*ExchangeData))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Stream_ServiceDesc is the grpc.ServiceDesc for Stream service.
+// Communication_ServiceDesc is the grpc.ServiceDesc for Communication service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Stream_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "message_stream.Stream",
-	HandlerType: (*StreamServer)(nil),
+var Communication_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "message_stream.Communication",
+	HandlerType: (*CommunicationServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "SendData",
-			Handler:    _Stream_SendData_Handler,
+			Handler:    _Communication_SendData_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

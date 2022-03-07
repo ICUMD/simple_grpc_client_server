@@ -3,10 +3,10 @@ syntax = "proto3";
 option go_package = "./api";
 package message_stream;
 
-message StreamingData {
+message ExchangeData {
     string curr_data = 1;
 }
 
-service Stream {
-    rpc SendData(StreamingData) returns (StreamingData) {}        
+service Communication {
+    rpc SendData(ExchangeData) returns (ExchangeData) {}        
 }
